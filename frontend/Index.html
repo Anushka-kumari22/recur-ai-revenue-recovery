@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Recur — AI Revenue Recovery</title>
+<style>
+  :root {
+    --bg: #0d0d12;
+    --card: #16161d;
+    --border: #262631;
+    --text: #e8e8f0;
+    --muted: #8a8a9a;
+    --accent: #7c6df0;
+    --accent-soft: rgba(124, 109, 240, 0.15);
+    --green: #35d187;
+    --amber: #f0b73c;
+    --red: #f0546d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 32px 24px 64px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  header { margin-bottom: 32px; }
+  h1 { font-size: 28px; margin: 0 0 6px; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); font-size: 15px; }
+  .badges { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .badge {
+    font-size: 12px; padding: 4px 10px; border-radius: 999px;
+    background: var(--accent-soft); color: var(--accent); border: 1px solid rgba(124,109,240,0.3);
+  }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 28px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .card .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .card .value { font-size: 26px; font-weight: 600; }
+  .card .value.green { color: var(--green); }
+  .card .value.amber { color: var(--amber); }
+  section { margin-bottom: 28px; }
+  h2 { font-size: 15px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 14px; }
+  .panel {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px;
+  }
+  form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 4px; }
+  input, select {
+    width: 100%; padding: 9px 11px; border-radius: 8px; border: 1px solid var(--border);
+    background: #0f0f16; color: var(--text); font-size: 14px;
+  }
+  input:focus, select:focus { outline: none; border-color: var(--accent); }
+  button {
+    grid-column: 1 / -1; padding: 11px; border-radius: 8px; border: none;
+    background: var(--accent); color: white; font-weight: 600; font-size: 14px; cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  button:hover { opacity: 0.9; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  pre {
+    background: #0a0a10; border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px; font-size: 12.5px; overflow-x: auto; color: #b8e0c8;
+    max-height: 380px;
+  }
+  .pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .pill.approved { background: rgba(53,209,135,0.15); color: var(--green); }
+  .pill.blocked { background: rgba(240,84,109,0.15); color: var(--red); }
+  .pill.review { background: rgba(240,183,60,0.15); color: var(--amber); }
+  footer { margin-top: 40px; color: var(--muted); font-size: 13px; text-align: center; }
+  footer a { color: var(--accent); text-decoration: none; }
+  .loading { color: var(--muted); font-size: 13px; }
+  .error-box {
+    background: rgba(240,84,109,0.1); border: 1px solid rgba(240,84,109,0.3);
+    color: var(--red); padding: 12px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Recur — AI Revenue Recovery</h1>
+    <div class="sub">Diagnosis → Recovery Planning → Governance → Execution → Persistence → Analytics</div>
+    <div class="badges">
+      <span class="badge">FastAPI</span>
+      <span class="badge">SQLAlchemy + SQLite</span>
+      <span class="badge">71 tests passing</span>
+      <span class="badge">CI/CD via GitHub Actions</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>Live Metrics</h2>
+    <div class="grid" id="metrics-grid">
+      <div class="card"><div class="label">Total Records</div><div class="value" id="m-total">—</div></div>
+      <div class="card"><div class="label">At-Risk Revenue</div><div class="value" id="m-risk">—</div></div>
+      <div class="card"><div class="label">Recovered</div><div class="value green" id="m-recovered">—</div></div>
+      <div class="card"><div class="label">Recovery Rate</div><div class="value amber" id="m-rate">—</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Try the Pipeline Live</h2>
+    <div class="panel">
+      <div id="form-error"></div>
+      <form id="pipeline-form">
+        <div>
+          <label>Record ID</label>
+          <input type="text" id="record_id" required />
+        </div>
+        <div>
+          <label>Customer ID</label>
+          <input type="text" id="customer_id" required />
+        </div>
+        <div>
+          <label>Subscription ID</label>
+          <input type="text" id="subscription_id" required />
+        </div>
+        <div>
+          <label>Amount (INR)</label>
+          <input type="number" id="amount" step="0.01" min="0.01" required />
+        </div>
+        <div>
+          <label>Failure Type</label>
+          <select id="failure_type">
+            <option value="network_timeout">network_timeout</option>
+            <option value="insufficient_funds">insufficient_funds</option>
+            <option value="card_expired">card_expired</option>
+            <option value="mandate_expired">mandate_expired</option>
+            <option value="bank_decline">bank_decline</option>
+            <option value="risk_hold">risk_hold</option>
+          </select>
+        </div>
+        <div>
+          <label>Payment Method</label>
+          <select id="payment_method">
+            <option value="upi">upi</option>
+            <option value="card">card</option>
+            <option value="netbanking">netbanking</option>
+            <option value="emandate">emandate</option>
+          </select>
+        </div>
+        <button type="submit" id="submit-btn">Run Recovery Pipeline</button>
+      </form>
+      <div id="result-loading" class="loading" style="display:none;">Processing…</div>
+      <pre id="result-output" style="display:none;"></pre>
+    </div>
+  </section>
+
+  <footer>
+    Built by Anushka Kumari ·
+    <a href="/docs" target="_blank">API Docs</a> ·
+    <a href="https://github.com/Anushka-kumari22/recur-ai-revenue-recovery" target="_blank">GitHub</a>
+  </footer>
+
+</div>
+
+<script>
+  const API_BASE = "/api/v1";
+
+  function fmtCurrency(n) {
+    if (n === undefined || n === null) return "—";
+    return "₹" + Number(n).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  async function loadMetrics() {
+    try {
+      const res = await fetch(`${API_BASE}/analytics/dashboard`);
+      const data = await res.json();
+      const overall = data.overall || {};
+      document.getElementById("m-total").textContent = overall.total_records ?? 0;
+      document.getElementById("m-risk").textContent = fmtCurrency(overall.total_amount_at_risk);
+      document.getElementById("m-recovered").textContent = fmtCurrency(overall.total_recovered_amount);
+      document.getElementById("m-rate").textContent = (overall.recovery_rate_pct ?? 0) + "%";
+    } catch (err) {
+      console.error("Failed to load metrics", err);
+    }
+  }
+
+  document.getElementById("pipeline-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const btn = document.getElementById("submit-btn");
+    const errorBox = document.getElementById("form-error");
+    const loadingEl = document.getElementById("result-loading");
+    const outputEl = document.getElementById("result-output");
+
+    errorBox.innerHTML = "";
+    outputEl.style.display = "none";
+    loadingEl.style.display = "block";
+    btn.disabled = true;
+
+    const payload = {
+      record_id: document.getElementById("record_id").value,
+      customer_id: document.getElementById("customer_id").value,
+      subscription_id: document.getElementById("subscription_id").value,
+      amount: document.getElementById("amount").value,
+      currency: "INR",
+      failure_type: document.getElementById("failure_type").value,
+      payment_method: document.getElementById("payment_method").value,
+    };
+
+    try {
+      const res = await fetch(`${API_BASE}/pipeline/process`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      loadingEl.style.display = "none";
+      outputEl.style.display = "block";
+
+      if (!res.ok) {
+        errorBox.innerHTML = `<div class="error-box">Request failed (${res.status}): ${data.detail || "Unknown error"}</div>`;
+        outputEl.textContent = JSON.stringify(data, null, 2);
+      } else {
+        outputEl.textContent = JSON.stringify(data, null, 2);
+        loadMetrics(); // refresh metrics after a successful run
+      }
+    } catch (err) {
+      loadingEl.style.display = "none";
+      errorBox.innerHTML = `<div class="error-box">Network error: ${err.message}</div>`;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  loadMetrics();
+</script>
+</body>
+</html>
