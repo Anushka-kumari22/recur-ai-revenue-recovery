@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
 
 from recur.exceptions import PersistenceError
 from recur.orchestration import PipelineResult
@@ -10,6 +11,7 @@ from recur.persistence.models import RecoveryAuditRecord
 
 def save_pipeline_result(
     result: PipelineResult,
+    session: Session | None = None,
 ) -> RecoveryAuditRecord:
     """
     Persist one complete pipeline result to the audit database.
@@ -134,12 +136,17 @@ def save_pipeline_result(
             ),
         )
 
-        with SessionLocal() as session:
-            session.add(audit_record)
-            session.commit()
-            session.refresh(audit_record)
+        if session is None:
+            with SessionLocal() as owned_session:
+                owned_session.add(audit_record)
+                owned_session.commit()
+                owned_session.refresh(audit_record)
+                return audit_record
 
-            return audit_record
+        session.add(audit_record)
+        session.commit()
+        session.refresh(audit_record)
+        return audit_record
 
     except SQLAlchemyError as exc:
         raise PersistenceError(

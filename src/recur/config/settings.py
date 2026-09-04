@@ -46,6 +46,10 @@ class Settings(BaseSettings):
         default=8000,
     )
 
+    payment_provider: str = Field(
+        default="simulator",
+    )
+
     log_level: str = Field(
         default="INFO",
     )

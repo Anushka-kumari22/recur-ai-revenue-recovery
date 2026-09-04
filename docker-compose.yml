@@ -1,0 +1,20 @@
+services:
+  recur-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: recur-api
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - ./data/database:/app/data/database
+
+    environment:
+      ENVIRONMENT: production
+      DEBUG: "false"
+      LOG_LEVEL: INFO
+
+    restart: unless-stopped

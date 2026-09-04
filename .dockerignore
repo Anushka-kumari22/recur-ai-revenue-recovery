@@ -1,0 +1,34 @@
+# Python virtual environments
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Test and coverage files
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# Environment files
+.env
+
+# Local runtime data
+data/database/*.db
+data/processed/*.csv
+
+# Generated Python artifacts
+*.egg-info/
+
+# Operating system files
+.DS_Store

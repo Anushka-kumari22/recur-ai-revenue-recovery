@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 from decimal import Decimal
 
 from sqlalchemy import func, select
@@ -84,7 +85,7 @@ def _get_distribution(
     ]
 
 
-def get_analytics_dashboard() -> AnalyticsDashboard:
+def get_analytics_dashboard(session=None) -> AnalyticsDashboard:
     """
     Generate a complete analytics dashboard from persisted
     recovery audit records.
@@ -101,7 +102,13 @@ def get_analytics_dashboard() -> AnalyticsDashboard:
     - Execution status distribution
     """
 
-    with SessionLocal() as session:
+    session_context = (
+        SessionLocal()
+        if session is None
+        else nullcontext(session)
+    )
+
+    with session_context as session:
 
         # ----------------------------------------------
         # RECORD COUNTS
