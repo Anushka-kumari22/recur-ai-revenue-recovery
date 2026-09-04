@@ -79,7 +79,14 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
-
+@app.get("/")
+def root():
+    return {
+        "message": "Recur AI Revenue Recovery API is running",
+        "status": "healthy",
+        "docs": "/docs",
+        "health": "/api/v1/health",
+    }
 
 # ============================================================
 # VERSIONED API ROUTERS
@@ -201,6 +208,7 @@ async def global_exception_handler(
     "/recoveries",
     response_model=RecoveryListResponse,
 )
+
 def list_recoveries(
     page: int = Query(
         default=1,
