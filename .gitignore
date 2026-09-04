@@ -1,0 +1,29 @@
+# Virtual environment
+.venv/
+
+# Environment variables and secrets
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Test and coverage files
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE files
+.vscode/
+
+# Operating system files
+.DS_Store
+
+# Generated data
+data/processed/*
+!data/processed/.gitkeep

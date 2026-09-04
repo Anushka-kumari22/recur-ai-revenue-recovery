@@ -1,0 +1,7 @@
+pydantic
+pydantic-settings
+python-dotenv
+pytest
+pandas
+httpx2
+pydantic-settings
