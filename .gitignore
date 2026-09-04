@@ -1,6 +1,7 @@
 # Virtual environment
 .venv/
 venv/
+
 # Environment variables and secrets
 .env
 
@@ -17,6 +18,8 @@ htmlcov/
 *.db
 *.sqlite
 *.sqlite3
+data/database/*.db
+!data/database/.gitkeep
 
 # IDE files
 .vscode/
