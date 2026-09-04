@@ -10,7 +10,8 @@ from fastapi import (
     Request,
 )
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from recur.analytics import get_analytics_dashboard
 from recur.api.responses import (
@@ -79,14 +80,25 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+
+
+# ============================================================
+# FRONTEND — served directly from the API root
+# ============================================================
+# The dashboard lives in frontend/index.html and calls the
+# /api/v1/... endpoints below via fetch(). Mounting /static means
+# any future CSS/JS/image files split out of the single HTML file
+# are served automatically without touching this file again.
+
 @app.get("/")
 def root():
-    return {
-        "message": "Recur AI Revenue Recovery API is running",
-        "status": "healthy",
-        "docs": "/docs",
-        "health": "/api/v1/health",
-    }
+    """Serves the live HTML dashboard instead of a bare JSON status
+    payload, so the deployed root URL is demo-ready on its own."""
+    return FileResponse("frontend/index.html")
+
+
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
+
 
 # ============================================================
 # VERSIONED API ROUTERS
@@ -208,7 +220,6 @@ async def global_exception_handler(
     "/recoveries",
     response_model=RecoveryListResponse,
 )
-
 def list_recoveries(
     page: int = Query(
         default=1,
