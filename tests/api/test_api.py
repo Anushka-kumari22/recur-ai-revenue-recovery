@@ -1,10 +1,13 @@
+import pytest
 from fastapi.testclient import TestClient
 
 from recur.api.main import app
 
 
-client = TestClient(app)
-
+@pytest.fixture
+def client():
+    with TestClient(app) as test_client:
+        yield test_client
 
 def create_valid_payload() -> dict:
     """
@@ -29,7 +32,7 @@ def create_valid_payload() -> dict:
 # --------------------------------------------------
 
 
-def test_health_endpoint_returns_healthy_status():
+def test_health_endpoint_returns_healthy_status(client):
     """
     Verify that the health endpoint confirms that the API
     is running.
@@ -56,7 +59,7 @@ def test_health_endpoint_returns_healthy_status():
 # --------------------------------------------------
 
 
-def test_analytics_dashboard_returns_successfully():
+def test_analytics_dashboard_returns_successfully(client):
     """
     Verify that the analytics dashboard endpoint is
     accessible and returns data.
@@ -78,7 +81,7 @@ def test_analytics_dashboard_returns_successfully():
 # --------------------------------------------------
 
 
-def test_process_failure_successfully():
+def test_process_failure_successfully(client):
     """
     Verify that a valid failed payment completes the
     full recovery pipeline.
@@ -133,7 +136,7 @@ def test_process_failure_successfully():
 # --------------------------------------------------
 
 
-def test_negative_payment_amount_is_rejected():
+def test_negative_payment_amount_is_rejected(client):
     """
     Verify that negative payment amounts are rejected
     by the API validation layer.
@@ -151,7 +154,7 @@ def test_negative_payment_amount_is_rejected():
     assert response.status_code == 422
 
 
-def test_zero_payment_amount_is_rejected():
+def test_zero_payment_amount_is_rejected(client):
     """
     Verify that zero payment amounts are rejected.
     """
@@ -168,7 +171,7 @@ def test_zero_payment_amount_is_rejected():
     assert response.status_code == 422
 
 
-def test_empty_record_id_is_rejected():
+def test_empty_record_id_is_rejected(client):
     """
     Verify that an empty record ID is rejected.
     """
@@ -185,7 +188,7 @@ def test_empty_record_id_is_rejected():
     assert response.status_code == 422
 
 
-def test_invalid_failure_type_is_rejected():
+def test_invalid_failure_type_is_rejected(client):
     """
     Verify that unsupported failure types are rejected.
     """
@@ -202,7 +205,7 @@ def test_invalid_failure_type_is_rejected():
     assert response.status_code == 422
 
 
-def test_invalid_payment_method_is_rejected():
+def test_invalid_payment_method_is_rejected(client):
     """
     Verify that unsupported payment methods are rejected.
     """
@@ -219,7 +222,7 @@ def test_invalid_payment_method_is_rejected():
     assert response.status_code == 422
 
 
-def test_negative_attempt_number_is_rejected():
+def test_negative_attempt_number_is_rejected(client):
     """
     Verify that negative attempt numbers are rejected.
     """
@@ -236,7 +239,7 @@ def test_negative_attempt_number_is_rejected():
     assert response.status_code == 422
 
 
-def test_negative_contact_count_is_rejected():
+def test_negative_contact_count_is_rejected(client):
     """
     Verify that negative customer contact counts are
     rejected.

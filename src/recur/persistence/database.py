@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from sqlalchemy import create_engine
 from sqlalchemy.engine import make_url
 from sqlalchemy.orm import (
@@ -16,8 +18,17 @@ database_url = make_url(DATABASE_URL)
 
 connect_args: dict = {}
 
+
 if database_url.get_backend_name() == "sqlite":
     connect_args["check_same_thread"] = False
+
+    # Create the parent directory for file-based SQLite databases.
+    if database_url.database and database_url.database != ":memory:":
+        database_path = Path(database_url.database)
+        database_path.parent.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
 
 
 class Base(DeclarativeBase):
