@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Recur — AI Revenue Recovery</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --blue: #3395ff;
@@ -18,228 +18,379 @@
     --bg: #f7f9fc;
     --card: #ffffff;
     --green: #12a150;
+    --green-soft: #e7f8ee;
     --amber: #b7791f;
+    --amber-soft: #fdf3e0;
     --red: #d43f4a;
     --red-soft: #fdeced;
     --radius: 14px;
     --shadow: 0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06);
+    --shadow-lg: 0 4px 20px rgba(16,24,40,0.08);
   }
   * { box-sizing: border-box; }
   body {
-    margin: 0;
+    margin: 0; background: var(--bg); color: var(--text);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg);
-    color: var(--text);
+  }
+  code, .mono { font-family: 'JetBrains Mono', monospace; }
+  a { color: inherit; }
+
+  /* NAV */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 32px; border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
+    position: sticky; top: 0; z-index: 20;
+  }
+  .brand { display: flex; align-items: center; gap: 9px; font-weight: 800; font-size: 18px; color: var(--navy); }
+  .brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+  .nav-links { display: flex; gap: 26px; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 13.5px; font-weight: 500; }
+  .nav-links a:hover { color: var(--blue-dark); }
+  .nav-cta {
+    background: var(--blue); color: white; padding: 9px 18px; border-radius: 999px;
+    font-size: 13.5px; font-weight: 700; text-decoration: none;
+    box-shadow: 0 4px 12px rgba(51,149,255,0.3);
   }
 
-  .navbar {
-    background: #ffffff;
-    border-bottom: 1px solid var(--border);
-    padding: 14px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  /* HERO */
+  .hero { text-align: center; padding: 68px 24px 48px; max-width: 780px; margin: 0 auto; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--blue-soft); color: var(--blue-dark);
+    font-size: 12px; font-weight: 700; letter-spacing: 0.03em;
+    padding: 6px 14px; border-radius: 999px; margin-bottom: 22px; text-transform: uppercase;
   }
-  .navbar .brand {
-    font-weight: 800;
-    font-size: 19px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--navy);
-  }
-  .navbar .brand .dot {
-    width: 9px; height: 9px; border-radius: 50%;
-    background: var(--blue);
-  }
-  .navbar .links { display: flex; gap: 22px; }
-  .navbar .links a {
-    color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500;
-    transition: color 0.15s;
-  }
-  .navbar .links a:hover { color: var(--blue-dark); }
-
-  .wrap { max-width: 1040px; margin: 0 auto; padding: 48px 24px 72px; }
-
-  .hero { margin-bottom: 40px; }
-  .hero .eyebrow {
-    display: inline-block; background: var(--blue-soft); color: var(--blue-dark);
-    font-size: 12.5px; font-weight: 700; letter-spacing: 0.02em;
-    padding: 5px 12px; border-radius: 999px; margin-bottom: 16px;
-  }
-  h1 {
-    font-size: 34px; font-weight: 800; margin: 0 0 10px; letter-spacing: -0.02em;
-    color: var(--navy); line-height: 1.2;
-  }
+  h1 { font-size: 40px; font-weight: 800; line-height: 1.22; margin: 0 0 16px; letter-spacing: -0.02em; color: var(--navy); }
   h1 .accent { color: var(--blue); }
-  .hero .sub { color: var(--muted); font-size: 16px; max-width: 640px; line-height: 1.6; }
-  .badges { margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap; }
-  .badge {
-    font-size: 12.5px; padding: 6px 13px; border-radius: 999px;
-    background: #fff; color: var(--navy); border: 1px solid var(--border);
-    font-weight: 600; box-shadow: var(--shadow);
+  .hero p { color: var(--muted); font-size: 16.5px; line-height: 1.65; margin: 0 auto 28px; max-width: 560px; }
+  .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 26px; }
+  .btn-primary, .btn-secondary {
+    padding: 13px 24px; border-radius: 999px; font-weight: 700; font-size: 14.5px;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 7px;
   }
+  .btn-primary { background: linear-gradient(135deg, var(--blue), var(--blue-dark)); color: white; box-shadow: 0 4px 14px rgba(51,149,255,0.35); }
+  .btn-secondary { background: #fff; border: 1.5px solid var(--border); color: var(--navy); }
+  .trust-row { display: flex; gap: 22px; justify-content: center; flex-wrap: wrap; color: var(--muted); font-size: 12.5px; font-weight: 500; }
+  .trust-row span { display: flex; align-items: center; gap: 5px; }
 
-  section { margin-bottom: 36px; }
-  h2 {
-    font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;
-    color: var(--muted); margin-bottom: 16px; font-weight: 700;
+  /* SECTIONS */
+  .section { max-width: 1080px; margin: 0 auto; padding: 44px 24px; }
+  .section-label {
+    color: var(--blue-dark); font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 8px;
   }
+  .section-title { font-size: 23px; font-weight: 800; margin: 0 0 22px; color: var(--navy); }
 
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-  .card {
+  /* PIPELINE STRIP */
+  .pipeline-strip { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
+  .stage {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 15px 18px; min-width: 128px; flex: 1; box-shadow: var(--shadow);
+  }
+  .stage .num { color: var(--blue); font-size: 11px; font-weight: 700; margin-bottom: 6px; }
+  .stage .name { font-size: 12.5px; font-weight: 700; letter-spacing: 0.02em; color: var(--navy); }
+
+  /* DASHBOARD WINDOW */
+  .window {
     background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 22px 24px; box-shadow: var(--shadow);
+    overflow: hidden; margin-top: 24px; box-shadow: var(--shadow-lg);
   }
-  .card .label { color: var(--muted); font-size: 12.5px; font-weight: 600; margin-bottom: 10px; }
-  .card .value { font-size: 28px; font-weight: 800; color: var(--navy); letter-spacing: -0.01em; }
-  .card .value.green { color: var(--green); }
-  .card .value.amber { color: var(--amber); }
+  .window-bar {
+    display: flex; align-items: center; gap: 8px; padding: 11px 18px;
+    border-bottom: 1px solid var(--border); background: #fafbfd;
+  }
+  .window-bar .traffic { display: flex; gap: 6px; }
+  .window-bar .traffic span { width: 10px; height: 10px; border-radius: 50%; background: #e2e6ee; }
+  .window-bar .path { color: var(--muted); font-size: 12px; margin-left: 6px; }
+  .live-badge {
+    margin-left: auto; display: flex; align-items: center; gap: 5px;
+    color: var(--green); font-size: 11.5px; font-weight: 700;
+  }
+  .live-badge .ping { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
 
-  .panel {
-    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 28px; box-shadow: var(--shadow);
+  .window-body { padding: 24px; }
+  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 14px; margin-bottom: 8px; }
+  .metric-card {
+    background: #fbfcfe; border: 1px solid var(--border); border-radius: 10px; padding: 17px 19px;
   }
-  form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px; }
-  label { font-size: 13px; font-weight: 600; color: var(--navy); display: block; margin-bottom: 6px; }
+  .metric-card .label { color: var(--muted); font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; }
+  .metric-card .value { font-size: 25px; font-weight: 800; color: var(--navy); }
+  .metric-card .value.green { color: var(--green); }
+  .metric-card .value.amber { color: var(--amber); }
+
+  .badges-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+  .mini-badge {
+    background: #fff; border: 1px solid var(--border); color: var(--navy);
+    font-size: 11.5px; font-weight: 600; padding: 5px 10px; border-radius: 999px;
+  }
+
+  /* FORM PANEL */
+  .form-panel { background: #fbfcfe; border: 1px solid var(--border); border-radius: 10px; padding: 22px; margin-top: 8px; }
+  .form-panel h3 { font-size: 14px; margin: 0 0 14px; font-weight: 700; color: var(--navy); }
+  form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  label { font-size: 12.5px; color: var(--navy); font-weight: 600; display: block; margin-bottom: 6px; }
   input, select {
-    width: 100%; padding: 11px 13px; border-radius: 9px; border: 1.5px solid var(--border);
-    background: #fbfcfe; color: var(--text); font-size: 14px; font-family: inherit;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.5px solid var(--border);
+    background: #fff; color: var(--text); font-size: 13.5px; font-family: inherit;
   }
-  input:focus, select:focus {
-    outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(51,149,255,0.15);
-    background: #fff;
-  }
-  button {
-    grid-column: 1 / -1; padding: 13px; border-radius: 999px; border: none;
+  input:focus, select:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(51,149,255,0.15); }
+  button.run {
+    grid-column: 1/-1; padding: 12px; border-radius: 999px; border: none;
     background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-    color: white; font-weight: 700; font-size: 15px; cursor: pointer;
-    box-shadow: 0 4px 14px rgba(51,149,255,0.35);
-    transition: transform 0.12s, box-shadow 0.12s;
+    color: white; font-weight: 700; font-size: 14px; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(51,149,255,0.3);
   }
-  button:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(51,149,255,0.45); }
-  button:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
-
+  button.run:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
   pre {
-    background: #0d1526; border: 1px solid #1c2b45; border-radius: 10px;
-    padding: 18px; font-size: 12.5px; overflow-x: auto; color: #9be3b8;
-    max-height: 380px; font-family: 'SF Mono', Consolas, monospace;
+    background: #0d1526; border: 1px solid #1c2b45; border-radius: 8px;
+    padding: 17px; font-size: 12px; overflow-x: auto; color: #9be3b8; max-height: 340px;
+    font-family: 'JetBrains Mono', monospace;
   }
-  .loading { color: var(--muted); font-size: 13.5px; font-weight: 500; }
   .error-box {
     background: var(--red-soft); border: 1px solid #f3c6c9;
-    color: var(--red); padding: 13px 15px; border-radius: 10px; font-size: 13.5px;
-    margin-bottom: 14px; font-weight: 500;
+    color: var(--red); padding: 11px 13px; border-radius: 8px; font-size: 13px; margin-bottom: 12px;
+  }
+  .loading { color: var(--muted); font-size: 13px; }
+
+  /* FEATURE CARDS */
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 16px; }
+  .feature-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; box-shadow: var(--shadow); }
+  .feature-icon {
+    width: 36px; height: 36px; border-radius: 9px; background: var(--blue-soft);
+    display: flex; align-items: center; justify-content: center; font-size: 17px; margin-bottom: 15px;
+  }
+  .feature-card h4 { font-size: 15.5px; margin: 0 0 10px; color: var(--navy); }
+  .feature-card ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 13px; line-height: 1.9; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+  th, td { padding: 14px 18px; text-align: left; font-size: 13px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 11.5px; letter-spacing: 0.04em; background: #fafbfd; }
+  td.good { color: var(--blue-dark); font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--border); margin-top: 44px; padding: 44px 24px 26px; background: #fff; }
+  .footer-grid { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap: 24px; margin-bottom: 32px; }
+  .footer-col h5 { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 12px; }
+  .footer-col a { display: block; color: var(--muted); text-decoration: none; font-size: 13px; margin-bottom: 9px; }
+  .footer-col a:hover { color: var(--blue-dark); }
+  .footer-bottom {
+    max-width: 1080px; margin: 0 auto; display: flex; justify-content: space-between;
+    align-items: center; padding-top: 22px; border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 12.5px; flex-wrap: wrap; gap: 10px;
   }
 
-  footer {
-    margin-top: 48px; color: var(--muted); font-size: 13.5px; text-align: center;
-    border-top: 1px solid var(--border); padding-top: 24px;
-  }
-  footer a { color: var(--blue-dark); text-decoration: none; font-weight: 600; }
-  footer a:hover { text-decoration: underline; }
-
-  @media (max-width: 640px) {
+  @media (max-width: 700px) {
     form { grid-template-columns: 1fr; }
-    .navbar .links { display: none; }
+    .nav-links { display: none; }
+    .pipeline-strip { flex-wrap: wrap; }
+    h1 { font-size: 30px; }
   }
 </style>
 </head>
 <body>
 
-<nav class="navbar">
+<nav>
   <div class="brand"><span class="dot"></span> Recur</div>
-  <div class="links">
+  <div class="nav-links">
+    <a href="#pipeline">Pipeline</a>
+    <a href="#dashboard">Live Dashboard</a>
+    <a href="#architecture">Architecture</a>
     <a href="/docs" target="_blank">API Docs</a>
-    <a href="https://github.com/Anushka-kumari22/recur-ai-revenue-recovery" target="_blank">GitHub</a>
-    <a href="/api/v1/health" target="_blank">Status</a>
   </div>
+  <a class="nav-cta" href="#dashboard">Try it live →</a>
 </nav>
 
-<div class="wrap">
+<div class="hero">
+  <span class="pill">⚡ AI Revenue Recovery Engine</span>
+  <h1>Diagnose, plan, and recover <span class="accent">failed payments</span> — automatically.</h1>
+  <p>
+    Recur is a layered recovery pipeline: it diagnoses why a payment failed,
+    plans the right recovery action, checks it against governance rules,
+    executes it, and keeps a complete audit trail — built and verified end to end.
+  </p>
+  <div class="cta-row">
+    <a class="btn-primary" href="#dashboard">▶ Try the Pipeline Live</a>
+    <a class="btn-secondary" href="/docs" target="_blank">📘 View API Docs</a>
+  </div>
+  <div class="trust-row">
+    <span>✅ 71 tests passing</span>
+    <span>🔁 CI/CD via GitHub Actions</span>
+    <span>🧩 Provider-abstracted execution</span>
+  </div>
+</div>
 
-  <div class="hero">
-    <span class="eyebrow">AI REVENUE RECOVERY</span>
-    <h1>Recover failed payments <span class="accent">before they're lost</span>.</h1>
-    <div class="sub">
-      Recur diagnoses why a recurring payment failed, plans the right recovery action,
-      checks it against governance rules, executes it, and keeps a full audit trail —
-      end to end, automatically.
+<section class="section" id="pipeline">
+  <div class="section-label">How it works</div>
+  <div class="section-title">The Recovery Pipeline</div>
+  <div class="pipeline-strip">
+    <div class="stage"><div class="num">01</div><div class="name">DIAGNOSIS</div></div>
+    <div class="stage"><div class="num">02</div><div class="name">RECOVERY PLANNING</div></div>
+    <div class="stage"><div class="num">03</div><div class="name">GOVERNANCE</div></div>
+    <div class="stage"><div class="num">04</div><div class="name">EXECUTION</div></div>
+    <div class="stage"><div class="num">05</div><div class="name">PERSISTENCE</div></div>
+    <div class="stage"><div class="num">06</div><div class="name">ANALYTICS</div></div>
+  </div>
+</section>
+
+<section class="section" id="dashboard">
+  <div class="section-label">Live</div>
+  <div class="section-title">Recovery Dashboard &amp; Pipeline Runner</div>
+
+  <div class="window">
+    <div class="window-bar">
+      <div class="traffic"><span></span><span></span><span></span></div>
+      <span class="path mono">recur.api.main — /api/v1/analytics/dashboard</span>
+      <span class="live-badge"><span class="ping"></span> LIVE</span>
     </div>
-    <div class="badges">
-      <span class="badge">⚡ FastAPI</span>
-      <span class="badge">🗄️ SQLAlchemy + SQLite</span>
-      <span class="badge">✅ 71 tests passing</span>
-      <span class="badge">🔁 CI/CD via GitHub Actions</span>
+    <div class="window-body">
+
+      <div class="metric-grid">
+        <div class="metric-card"><div class="label">Total Records</div><div class="value" id="m-total">—</div></div>
+        <div class="metric-card"><div class="label">At-Risk Revenue</div><div class="value" id="m-risk">—</div></div>
+        <div class="metric-card"><div class="label">Recovered</div><div class="value green" id="m-recovered">—</div></div>
+        <div class="metric-card"><div class="label">Recovery Rate</div><div class="value amber" id="m-rate">—</div></div>
+      </div>
+
+      <div class="badges-row">
+        <span class="mini-badge">FastAPI</span>
+        <span class="mini-badge">SQLAlchemy + SQLite</span>
+        <span class="mini-badge">71 tests passing</span>
+        <span class="mini-badge">CI/CD · GitHub Actions</span>
+      </div>
+
+      <div class="form-panel">
+        <h3>Trigger the Recovery Pipeline</h3>
+        <div id="form-error"></div>
+        <form id="pipeline-form">
+          <div><label>Record ID</label><input type="text" id="record_id" required /></div>
+          <div><label>Customer ID</label><input type="text" id="customer_id" required /></div>
+          <div><label>Subscription ID</label><input type="text" id="subscription_id" required /></div>
+          <div><label>Amount (INR)</label><input type="number" id="amount" step="0.01" min="0.01" required /></div>
+          <div>
+            <label>Failure Type</label>
+            <select id="failure_type">
+              <option value="network_timeout">network_timeout</option>
+              <option value="insufficient_funds">insufficient_funds</option>
+              <option value="card_expired">card_expired</option>
+              <option value="mandate_expired">mandate_expired</option>
+              <option value="bank_decline">bank_decline</option>
+              <option value="risk_hold">risk_hold</option>
+            </select>
+          </div>
+          <div>
+            <label>Payment Method</label>
+            <select id="payment_method">
+              <option value="upi">upi</option>
+              <option value="card">card</option>
+              <option value="netbanking">netbanking</option>
+              <option value="emandate">emandate</option>
+            </select>
+          </div>
+          <button type="submit" class="run" id="submit-btn">Run Recovery Pipeline</button>
+        </form>
+        <div id="result-loading" class="loading" style="display:none;">Processing…</div>
+        <pre id="result-output" style="display:none;"></pre>
+      </div>
+
     </div>
   </div>
+</section>
 
-  <section>
-    <h2>Live Metrics</h2>
-    <div class="grid" id="metrics-grid">
-      <div class="card"><div class="label">Total Records</div><div class="value" id="m-total">—</div></div>
-      <div class="card"><div class="label">At-Risk Revenue</div><div class="value" id="m-risk">—</div></div>
-      <div class="card"><div class="label">Recovered</div><div class="value green" id="m-recovered">—</div></div>
-      <div class="card"><div class="label">Recovery Rate</div><div class="value amber" id="m-rate">—</div></div>
+<section class="section" id="architecture">
+  <div class="section-label">Under the hood</div>
+  <div class="section-title">Why it's built this way</div>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🧩</div>
+      <h4>Provider Abstraction</h4>
+      <ul>
+        <li>Execution runs against a deterministic <code>SimulatorProvider</code></li>
+        <li>A real Razorpay/Stripe adapter implements the same interface — no rewrite needed</li>
+        <li>Idempotency keys prevent duplicate execution</li>
+      </ul>
     </div>
-  </section>
-
-  <section>
-    <h2>Try the Pipeline Live</h2>
-    <div class="panel">
-      <div id="form-error"></div>
-      <form id="pipeline-form">
-        <div>
-          <label>Record ID</label>
-          <input type="text" id="record_id" required />
-        </div>
-        <div>
-          <label>Customer ID</label>
-          <input type="text" id="customer_id" required />
-        </div>
-        <div>
-          <label>Subscription ID</label>
-          <input type="text" id="subscription_id" required />
-        </div>
-        <div>
-          <label>Amount (INR)</label>
-          <input type="number" id="amount" step="0.01" min="0.01" required />
-        </div>
-        <div>
-          <label>Failure Type</label>
-          <select id="failure_type">
-            <option value="network_timeout">network_timeout</option>
-            <option value="insufficient_funds">insufficient_funds</option>
-            <option value="card_expired">card_expired</option>
-            <option value="mandate_expired">mandate_expired</option>
-            <option value="bank_decline">bank_decline</option>
-            <option value="risk_hold">risk_hold</option>
-          </select>
-        </div>
-        <div>
-          <label>Payment Method</label>
-          <select id="payment_method">
-            <option value="upi">upi</option>
-            <option value="card">card</option>
-            <option value="netbanking">netbanking</option>
-            <option value="emandate">emandate</option>
-          </select>
-        </div>
-        <button type="submit" id="submit-btn">Run Recovery Pipeline →</button>
-      </form>
-      <div id="result-loading" class="loading" style="display:none;">Processing…</div>
-      <pre id="result-output" style="display:none;"></pre>
+    <div class="feature-card">
+      <div class="feature-icon">🛡️</div>
+      <h4>Governance Before Execution</h4>
+      <ul>
+        <li>Retry limits and customer-contact caps enforced automatically</li>
+        <li>Risk-flagged cases always route to human review</li>
+        <li>A sound plan can still be blocked — recommendation ≠ authorization</li>
+      </ul>
     </div>
-  </section>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h4>Full Audit Trail</h4>
+      <ul>
+        <li>Every diagnosis, plan, and decision persisted to SQLite</li>
+        <li>Analytics computed live from real records — never mock data</li>
+        <li>71 automated tests across every layer plus API integration</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-  <footer>
-    Built by Anushka Kumari ·
-    <a href="/docs" target="_blank">API Docs</a> ·
-    <a href="https://github.com/Anushka-kumari22/recur-ai-revenue-recovery" target="_blank">GitHub</a>
-  </footer>
+<section class="section">
+  <div class="section-label">Engineering honesty</div>
+  <div class="section-title">What this is — and isn't</div>
+  <table>
+    <thead>
+      <tr><th>Capability</th><th>Current State</th><th>Path to Production</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Payment Execution</td>
+        <td>Simulated via <code class="mono">SimulatorProvider</code></td>
+        <td class="good">Swap in RazorpayProvider behind existing interface</td>
+      </tr>
+      <tr>
+        <td>Database</td>
+        <td>SQLite, single file</td>
+        <td class="good">Repository pattern supports a Postgres migration</td>
+      </tr>
+      <tr>
+        <td>Authentication</td>
+        <td>None (demo deployment)</td>
+        <td class="good">API-key or OAuth2 layer before any real exposure</td>
+      </tr>
+      <tr>
+        <td>Testing &amp; CI</td>
+        <td class="good">71 tests, GitHub Actions on every push</td>
+        <td>Already production-appropriate</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
 
-</div>
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h5>Project</h5>
+      <a href="/docs" target="_blank">API Docs</a>
+      <a href="/api/v1/health" target="_blank">Health Status</a>
+      <a href="https://github.com/Anushka-kumari22/recur-ai-revenue-recovery" target="_blank">Source Code</a>
+    </div>
+    <div class="footer-col">
+      <h5>Pipeline Stages</h5>
+      <a href="#pipeline">Diagnosis</a>
+      <a href="#pipeline">Governance</a>
+      <a href="#pipeline">Execution</a>
+    </div>
+    <div class="footer-col">
+      <h5>Stack</h5>
+      <a href="#">FastAPI · Python 3.12</a>
+      <a href="#">SQLAlchemy · SQLite</a>
+      <a href="#">Docker · GitHub Actions</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>Built by Anushka Kumari — a portfolio project, not a certified payment processor.</span>
+    <span>MIT Licensed</span>
+  </div>
+</footer>
 
 <script>
   const API_BASE = "/api/v1";
@@ -265,7 +416,6 @@
 
   document.getElementById("pipeline-form").addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const btn = document.getElementById("submit-btn");
     const errorBox = document.getElementById("form-error");
     const loadingEl = document.getElementById("result-loading");
